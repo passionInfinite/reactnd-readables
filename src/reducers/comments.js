@@ -3,7 +3,7 @@ import {
   ADD_COMMENT,
   UPDATE_COMMENT,
   DELETE_COMMENT
-} from "../actions/comments"
+} from "../actions/types"
 import initialStates from './initialStates'
 
 export default function comments(state = initialStates.comments, action) {

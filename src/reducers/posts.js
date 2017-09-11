@@ -4,7 +4,7 @@ import {
   ADD_POST,
   UPDATE_POST,
   DELETE_POST
-} from "../actions/posts"
+} from "../actions/types"
 import initialStates from './initialStates'
 
 export default function posts(state = initialStates.posts, action) {
