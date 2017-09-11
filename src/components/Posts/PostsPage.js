@@ -78,6 +78,13 @@ class PostsPage extends Component {
     post['author'] = 'PassionInfinite'
     post['voteScore'] = 1
     this.props.actions.createPost(post)
+    this.setState({
+      newPost: {
+        'title': '',
+        'body': '',
+        'category': ''
+      }
+    })
   }
 
   render() {

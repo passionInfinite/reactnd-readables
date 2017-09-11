@@ -6,7 +6,7 @@ export function sort(states, type='voteScore') {
 }
 
 export function generateId() {
-  return _.times(10, () => _.random(35).toString(36)).join('');
+  return Math.random().toString(36).substring(2) + (new Date()).getTime().toString(36);
 }
 
 export function time(timestamp) {
