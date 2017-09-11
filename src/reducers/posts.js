@@ -27,7 +27,7 @@ export default function posts(state = initialStates.posts, action) {
         return [post]
 
     case DELETE_POST:
-      return state.filter(currentPosts => currentPosts.id != post)
+      return state.filter(currentPosts => currentPosts.id !== post)
 
     default:
       return state

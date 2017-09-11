@@ -7,7 +7,6 @@ import {Provider} from 'react-redux'
 import {createStore, applyMiddleware} from 'redux'
 import reducer from './reducers'
 import thunk from 'redux-thunk'
-import {loadPosts} from "./actions/posts";
 import routes from "./routes";
 import {loadAllCategories} from "./actions/categories";
 

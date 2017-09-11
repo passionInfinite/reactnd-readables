@@ -9,10 +9,6 @@ import Modal from 'react-modal'
 
 class Post extends React.Component {
 
-  constructor(props, context) {
-    super(props, context);
-  }
-
   state = {
     post: this.props.post,
     comments: this.props.comments,
