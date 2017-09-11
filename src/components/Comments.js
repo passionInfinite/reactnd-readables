@@ -97,7 +97,7 @@ class Comments extends React.Component {
             </div>
             <div className="col-md-4 ml-md-auto">
               <label className="control-label">Order By:</label>
-              <select className="form-control" style={{width: 200, display:'inline-block', marginLeft: 10}} value={this.state.sortBy} onChange={this.changeSortMethod.bind(this)}>
+              <select className="form-control sort-by-selection" value={this.state.sortBy} onChange={this.changeSortMethod.bind(this)}>
                 <option value="voteScore">Vote Score</option>
                 <option value="timestamp">TimeStamp</option>
               </select>
@@ -151,12 +151,12 @@ class Comments extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
-  return state
+function mapStateToProps({comments}) {
+  return {comments}
 }
 function mapDispatchToProps(dispatch) {
   let actions = {...postActions, ...commentActions};
   return {actions: bindActionCreators(actions, dispatch)}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Comments)
+export default connect(mapStateToProps,mapDispatchToProps)(Comments)
