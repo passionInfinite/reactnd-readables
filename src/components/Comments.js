@@ -63,7 +63,6 @@ class Comments extends React.Component {
   editComment = e => {
     e.preventDefault()
     let commentId = e.target.id
-    console.log(this.state.comments)
     let comments = this.state.comments
     let comment = comments.filter( currentComment => currentComment.id === commentId)
     this.setState({

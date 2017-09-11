@@ -56,7 +56,6 @@ export function updateComment(comment) {
 }
 
 export function deleteComment(commentId) {
-  console.log(commentId)
   return axios.delete(APP_URL+"/comments/"+commentId, APP_HEADER)
 }
 
