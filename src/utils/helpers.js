@@ -12,3 +12,7 @@ export function generateId() {
 export function time(timestamp) {
   return moment(timestamp).fromNow()
 }
+
+export function isEmpty(object) {
+  return _.isEmpty(object)
+}

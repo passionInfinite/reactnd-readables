@@ -7,7 +7,6 @@ import {connect} from "react-redux";
 import Post from "./Post";
 
 class PostPage extends Component {
-
   state = {
     post: this.props.posts,
     comments: this.props.comments,
@@ -21,6 +20,11 @@ class PostPage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+
+    if (nextProps.posts === null) {
+      return nextProps.history.push("/404")
+    }
+
     this.setState({
       post: nextProps.posts[0],
       comments: nextProps.comments

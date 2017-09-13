@@ -1,4 +1,5 @@
 import * as api from '../utils/api'
+import * as helper from "../utils/helpers";
 
 export const GET_POSTS = 'GET_POSTS'
 export const GET_POST_BY_ID = 'GET_POST_BY_ID'
@@ -95,15 +96,15 @@ export function createPost(post) {
 export function getPosts(posts) {
   return {
     type: GET_POSTS,
-    posts: posts
+    posts: posts.filter(post => post.delete !== false)
   }
 }
 
 export function postById(post) {
   return {
     type: GET_POST_BY_ID,
-    post: [post]
-  }
+    post: helper.isEmpty(post) ? null :[post]
+}
 }
 
 export function addPost(post) {

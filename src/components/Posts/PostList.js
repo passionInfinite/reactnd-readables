@@ -4,9 +4,9 @@ import Post from "./Post";
 export default function PostList({posts}) {
   return (
       <div>
-        {posts.map(post => (
+        {posts ? posts.map(post => (
           <Post post={post} key={post.id}/>
-        ))}
+        )) : []}
       </div>
   )
 }
