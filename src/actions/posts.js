@@ -104,7 +104,7 @@ export function postById(post) {
   return {
     type: GET_POST_BY_ID,
     post: helper.isEmpty(post) ? null :[post]
-}
+  }
 }
 
 export function addPost(post) {

@@ -9,16 +9,6 @@ import {
 
 /* Action Creators */
 
-export function loadAllComments() {
-  return function (dispatch) {
-    return api.getComments().then(response => {
-      if (response) {
-        dispatch(getComments(response.data))
-      }
-    })
-  }
-}
-
 export function loadCommentsById(postId) {
   return function (dispatch) {
     return api.getCommentsById(postId).then(response => {

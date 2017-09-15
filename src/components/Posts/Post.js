@@ -1,7 +1,9 @@
 import React from 'react'
 import Comments from "../Comments";
-import * as actions from '../../actions/posts'
+import * as postActions from '../../actions/posts'
+import * as commentActions from '../../actions/comments'
 import * as helpers from "../../utils/helpers";
+import * as categoryActions from "../../actions/categories";
 import Vote from "../Vote";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
@@ -24,25 +26,26 @@ class Post extends React.Component {
       'category': ''
     },
     isEditing: false,
+    categories: [],
     openModal: false
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.post) {
-      this.setState({
+      this.setState(prevState => ({
         post: nextProps.post,
-        comments: nextProps.comments,
         showBody: nextProps.showBody,
         showComment: nextProps.showComment,
-        categories: nextProps.categories,
-      })
+        comments: nextProps.comments,
+        categories: nextProps.categories
+      }))
     } else {
       this.setState({
         post: null,
-        comments: [],
         showBody: false,
         showComment: false,
         categories: nextProps.categories,
+        comments: []
       })
     }
   }
@@ -115,6 +118,11 @@ class Post extends React.Component {
                 </div>
               </div>
               {this.props.comments && this.props.showComments ? <div className="card-footer">
+                <div className="row margin-top-10">
+                  <div className="col-md-12">
+                    <h6>Comments: <span className="badge badge-success">{this.props.comments.length}</span></h6>
+                  </div>
+                </div>
                 <Comments comments={this.props.comments} post={this.props.post} />
               </div>: ""}
             </div>
@@ -159,12 +167,13 @@ class Post extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    categories: state.categories
+    categories: state.categories,
+    comments: state.comments
   }
 }
 
 function mapDispatchToProps(dispatch) {
-  return {actions: bindActionCreators(actions, dispatch)}
+  return {actions: bindActionCreators({ ...postActions, ...commentActions, ...categoryActions }, dispatch)}
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post);

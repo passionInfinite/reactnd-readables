@@ -12,7 +12,7 @@ export default function posts(state = initialStates.posts, action) {
 
   switch (action.type) {
     case GET_POSTS:
-      return posts.filter(post => post.deleted === false)
+      return posts
 
     case GET_POST_BY_ID:
       return post
