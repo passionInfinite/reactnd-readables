@@ -5,20 +5,13 @@ import * as commentActions from '../actions/comments'
 import {connect} from "react-redux";
 
 class Vote extends React.Component {
-
-  state = {
-    size: this.props.size,
-    id: this.props.id,
-    type: this.props.type
-  }
-
   upVote = e => {
     e.preventDefault()
-    switch (this.state.type) {
+    switch (this.props.type) {
       case "post":
-        return this.props.actions.addVote(this.state.id)
+        return this.props.actions.addVote(this.props.id)
       case "comment":
-        return this.props.actions.addCommentVote(this.state.id)
+        return this.props.actions.addCommentVote(this.props.id)
       default:
         console.log("No proper vote method call!")
     }
@@ -26,11 +19,11 @@ class Vote extends React.Component {
 
   downVote = e => {
     e.preventDefault()
-    switch (this.state.type) {
+    switch (this.props.type) {
       case "post":
-        return this.props.actions.subtractVote(this.state.id)
+        return this.props.actions.subtractVote(this.props.id)
       case "comment":
-        return this.props.actions.subtractCommentVote(this.state.id)
+        return this.props.actions.subtractCommentVote(this.props.id)
       default:
         console.log("No proper vote method call!")
     }
@@ -39,7 +32,8 @@ class Vote extends React.Component {
   componentWillReceiveProps(nextProps) {
     this.setState({
       size: nextProps.size,
-      id: nextProps.id
+      id: nextProps.id,
+      type: nextProps.type
     })
   }
 
@@ -48,8 +42,12 @@ class Vote extends React.Component {
     return (
       <div className="row">
         <div className="col-md-12">
-          <button className="btn btn-success btn-sm" style={{height: this.props.size, width: this.props.size, lineHeight:0}} onClick={this.upVote} ><i className="fa fa-plus" style={{fontSize: 10, marginLeft: -3, position: "absolute", marginTop: -5}}></i></button>
-          <button className="btn btn-danger btn-sm" style={{height: this.props.size, width: this.props.size, lineHeight:0, marginLeft:10}} onClick={this.downVote} ><i className="fa fa-minus" style={{fontSize: 10, marginLeft: -3, position: "absolute", marginTop: -5}}></i></button>
+          <button className="btn btn-success btn-sm" style={{height: this.props.size, width: this.props.size, lineHeight:0}} onClick={this.upVote} >
+            <i className="fa fa-plus" style={{fontSize: 10, marginLeft: -3, position: "absolute", marginTop: -5}}></i>
+          </button>
+          <button className="btn btn-danger btn-sm" style={{height: this.props.size, width: this.props.size, lineHeight:0, marginLeft:10}} onClick={this.downVote} >
+            <i className="fa fa-minus" style={{fontSize: 10, marginLeft: -3, position: "absolute", marginTop: -5}}></i>
+          </button>
         </div>
       </div>
     )

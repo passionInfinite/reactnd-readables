@@ -7,26 +7,19 @@ import {connect} from "react-redux";
 import Post from "./Post";
 
 class PostPage extends Component {
-  state = {
-    post: this.props.posts,
-    comments: this.props.comments,
-    categories: this.props.categories
-  }
 
   componentWillMount() {
     let postId = this.props.match.params.id
     this.props.actions.loadPostById(postId)
-    this.props.actions.loadAllComments(postId)
+    this.props.actions.loadCommentsById(postId)
   }
 
   componentWillReceiveProps(nextProps) {
-
     if (nextProps.posts === null) {
       return nextProps.history.push("/404")
     }
-
     this.setState({
-      post: nextProps.posts[0],
+      posts: nextProps.posts[0],
       comments: nextProps.comments
     })
   }
@@ -38,7 +31,7 @@ class PostPage extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-12">
-              <Post post={this.state.post} showBody={true} comments={this.state.comments} showComments={true} />
+              {this.props.posts[0] ? <Post post={this.props.posts[0]} showBody={true} comments={this.props.comments} showComments={true} /> : ""}
             </div>
           </div>
         </div>

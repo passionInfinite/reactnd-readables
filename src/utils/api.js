@@ -43,7 +43,10 @@ export function deletePost(postId) {
 
 
 /* Comments Endpoints */
-export function getComments(postId) {
+export function getComments() {
+  return axios.get(APP_URL+"/comments", APP_HEADER)
+}
+export function getCommentsById(postId) {
   return axios.get(APP_URL+"/posts/"+postId+"/comments", APP_HEADER)
 }
 

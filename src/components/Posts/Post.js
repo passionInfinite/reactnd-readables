@@ -10,19 +10,21 @@ import {Redirect} from 'react-router'
 
 class Post extends React.Component {
 
+  constructor(props, context) {
+    super(props, context);
+    this.deletePost = this.deletePost.bind(this);
+    this.closeModal = this.closeModal.bind(this)
+    this.handleChange = this.handleChange.bind(this)
+  }
+
   state = {
-    post: this.props.post,
-    comments: this.props.comments,
-    showBody: this.props.showBody,
-    showComment: this.props.showComment,
     editPost: {
       'title': '',
       'body': '',
       'category': ''
     },
     isEditing: false,
-    openModal: false,
-    categories: this.props.categories
+    openModal: false
   }
 
   componentWillReceiveProps(nextProps) {
@@ -47,12 +49,13 @@ class Post extends React.Component {
 
   deletePost = e => {
     e.preventDefault()
-    this.props.actions.removePost(this.state.post.id)
+    let postId = e.target.id
+    this.props.actions.removePost(postId)
   }
 
   editPost = (e) => {
     e.preventDefault()
-    let copyPost = this.state.post
+    let copyPost = this.props.post
     this.setState({
       editPost: copyPost,
       isEditing: true,
@@ -85,55 +88,55 @@ class Post extends React.Component {
   }
 
   render() {
-    if (this.state.post) {
+    if (this.props.post) {
       return (
         <div className="row">
           <div className="col-md-12">
-            <div className="card margin-top-10" key={this.state.post.id}>
+            <div className="card margin-top-10" key={this.props.post.id}>
               <div className="card-body">
                 <h4 className="card-title">
                   <div className="row">
                     <div className="col-md-6">
-                      <a href={'/'+this.state.post.category+'/'+this.state.post.id}>{this.state.post.title}</a> <span className="text-muted" style={{fontSize: 16}}>{helpers.time(this.state.post.timestamp)}</span>
+                      <a href={'/'+this.props.post.category+'/'+this.props.post.id}>{this.props.post.title}</a> <span className="text-muted" style={{fontSize: 16}}>{helpers.time(this.props.post.timestamp)}</span>
                     </div>
                     <div className="col-md-2 ml-md-auto">
-                      <button className="btn btn-info btn-sm margin-15" id={this.state.post.id} onClick={this.editPost}><i className="fa fa-pencil"></i></button>
-                      <button className="btn btn-danger btn-sm" id={this.state.post.id} onClick={this.deletePost.bind(this)}><i className="fa fa-trash"></i></button>
+                      <button className="btn btn-info btn-sm margin-15" id={this.props.post.id} onClick={this.editPost}><i className="fa fa-pencil"></i></button>
+                      <button className="btn btn-danger btn-sm" id={this.props.post.id} onClick={this.deletePost}><i className="fa fa-trash"></i></button>
                     </div>
                   </div>
                 </h4>
-                <h6 className="card-subtitle mb-2 text-muted">By: {this.state.post.author}</h6>
-                { this.state.showBody? <h4>{this.state.post.body}</h4> : ''}
+                <h6 className="card-subtitle mb-2 text-muted">By: {this.props.post.author}</h6>
+                { this.props.showBody? <h4>{this.props.post.body}</h4> : ''}
                 <div className="row">
                   <div className="col-md-2">
-                    <p style={{fontSize:"16px", marginBottom:0 }}>votes: {this.state.post.voteScore}</p>
-                    <Vote size={24} id={this.state.post.id} type={"post"} />
+                    <p style={{fontSize:"16px", marginBottom:0 }}>votes: {this.props.post.voteScore}</p>
+                    <Vote size={24} id={this.props.post.id} type={"post"} />
                   </div>
                 </div>
               </div>
-              {this.state.comments && this.props.showComments ? <div className="card-footer">
-                <Comments comments={this.state.comments} post={this.state.post} />
+              {this.props.comments && this.props.showComments ? <div className="card-footer">
+                <Comments comments={this.props.comments} post={this.props.post} />
               </div>: ""}
             </div>
 
             <Modal isOpen={this.state.openModal} contentLabel="Create Modal">
-              <i className="fa fa-close pull-right" onClick={this.closeModal.bind(this)}></i>
+              <i className="fa fa-close pull-right" onClick={this.closeModal}></i>
               <div className="row">
                 <div className="col-md-12">
                   <h4>Edit Post</h4>
                   <form onSubmit={this.savePost}>
                     <div className="form-group">
                       <label>Title</label>
-                      <input type="text" className="form-control" id="title" placeholder="Enter title" onChange={this.handleChange.bind(this)} value={this.state.editPost.title} required={true}/>
+                      <input type="text" className="form-control" id="title" placeholder="Enter title" onChange={this.handleChange} value={this.state.editPost.title} required={true}/>
                     </div>
                     <div className="form-group">
                       <label>Body</label>
-                      <textarea className="form-control" id="body" placeholder="Content of your post"  onChange={this.handleChange.bind(this)} value={this.state.editPost.body} required={true}/>
+                      <textarea className="form-control" id="body" placeholder="Content of your post"  onChange={this.handleChange} value={this.state.editPost.body} required={true}/>
                     </div>
                     <div className="form-check">
                       <label>Categories: </label>
-                      <select className="form-control" id="category" value={this.state.editPost.category} onChange={this.handleChange.bind(this)} required={true}>
-                        {this.state.categories.map(category => (
+                      <select className="form-control" id="category" value={this.state.editPost.category} onChange={this.handleChange} required={true}>
+                        {this.props.categories.map(category => (
                           <option value={category.name} key={category.path}>{category.name}</option>
                         ))}
                       </select>

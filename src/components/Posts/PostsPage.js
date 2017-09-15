@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import {Navbar} from "../Navbar";
 import {bindActionCreators} from "redux";
-import * as actions from '../../actions/posts'
 import {connect} from "react-redux";
 import PostList from "./PostList";
+import * as postActions from "../../actions/posts";
+import * as commentActions from "../../actions/comments";
 import * as helpers from "../../utils/helpers";
 import Modal from  'react-modal'
 
@@ -11,16 +12,15 @@ import Modal from  'react-modal'
 class PostsPage extends Component {
   constructor(props, context) {
     super(props, context);
+    this.changeSortMethod = this.changeSortMethod.bind(this);
+    this.handleChange = this.handleChange.bind(this);
     this.state = {
-      posts: this.props.posts,
-      sortBy: this.props.sortBy,
-      categories: this.props.categories,
       openModal: false,
       isEditing: false,
       newPost: {
         'title': '',
         'body': '',
-        'category': ''
+        'category': 'react'
       }
     }
   }
@@ -96,7 +96,7 @@ class PostsPage extends Component {
             <div className="col-md-12">
               <label className="control-label">Categories</label>
               <div className="alert alert-info" role="alert">
-                {this.state.categories.map(category => (
+                {this.props.categories.map(category => (
                   <a href={"/"+category.path} style={{textDecoration:null}} key={category.path} className="margin-15">
                     <h1 className="badge badge-secondary" style={{fontSize: 16}}>{category.name}</h1>
                   </a>
@@ -107,7 +107,7 @@ class PostsPage extends Component {
           <div className="row margin-top-10">
             <div className="col-md-2">
               <label className="control-label">Order By:</label>
-              <select className="form-control" value={this.state.sortBy} onChange={this.changeSortMethod.bind(this)}>
+              <select className="form-control" value={this.state.sortBy} onChange={this.changeSortMethod}>
                 <option value="voteScore">Vote Score</option>
                 <option value="timestamp">TimeStamp</option>
               </select>
@@ -132,16 +132,16 @@ class PostsPage extends Component {
               <form onSubmit={this.createPost}>
                 <div className="form-group">
                   <label>Title</label>
-                  <input type="text" className="form-control" id="title" placeholder="Enter title" value={this.state.newPost.title} onChange={this.handleChange.bind(this)} required={true}/>
+                  <input type="text" className="form-control" id="title" placeholder="Enter title" value={this.state.newPost.title} onChange={this.handleChange} required={true}/>
                 </div>
                 <div className="form-group">
                   <label>Body</label>
-                  <textarea className="form-control" id="body" placeholder="Content of your post"  onChange={this.handleChange.bind(this)} required={true}/>
+                  <textarea className="form-control" id="body" placeholder="Content of your post"  onChange={this.handleChange} required={true}/>
                 </div>
                 <div className="form-check">
                   <label>Categories: </label>
-                  <select className="form-control" id="category" onChange={this.handleChange.bind(this)} required={true}>
-                    {this.state.categories.map(category => (
+                  <select className="form-control" id="category" defaultValue={this.state.newPost.category} onChange={this.handleChange} required={true}>
+                    {this.props.categories.map(category => (
                       <option value={category.name} key={category.path}>{category.name}</option>
                     ))}
                   </select>
@@ -166,6 +166,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
+  let actions = { ...commentActions, ...postActions}
   return {actions: bindActionCreators(actions, dispatch)}
 }
 

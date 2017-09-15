@@ -8,10 +8,14 @@ import Vote from "./Vote";
 import Modal from 'react-modal'
 
 class Comments extends React.Component {
-
+  constructor(props, context) {
+    super(props, context);
+    this.handleChange = this.handleChange.bind(this)
+    this.changeSortMethod = this.changeSortMethod.bind(this)
+    this.closeModal = this.closeModal.bind(this)
+  }
   state = {
     sortBy: 'voteScore',
-    comments: helpers.sort(this.props.comments, this.props.sortBy),
     editComment: {},
     openModal: false,
     isEditing: false
@@ -33,8 +37,8 @@ class Comments extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      comments: helpers.sort(nextProps.comments),
-      sortBy: 'voteScore'
+      comments: helpers.sort(nextProps.comments, this.state.sortBy),
+      sortBy: this.state.sortBy
     })
   }
 
@@ -42,8 +46,8 @@ class Comments extends React.Component {
     let sortBy = e.target.value
     this.setState({
       comments: helpers.sort(this.props.comments, sortBy),
-      sortBy: sortBy
-    })
+      sortBy
+    });
   }
 
   deleteComment  = e => {
@@ -63,7 +67,7 @@ class Comments extends React.Component {
   editComment = e => {
     e.preventDefault()
     let commentId = e.target.id
-    let comments = this.state.comments
+    let comments = this.props.comments
     let comment = comments.filter( currentComment => currentComment.id === commentId)
     this.setState({
       openModal:true,
@@ -76,7 +80,7 @@ class Comments extends React.Component {
     this.props.actions.editComment(this.state.editComment)
     this.setState({
       openModal: false,
-      editComment: {}
+      newComment: {}
     })
   }
 
@@ -97,7 +101,7 @@ class Comments extends React.Component {
             </div>
             <div className="col-md-4 ml-md-auto">
               <label className="control-label">Order By:</label>
-              <select className="form-control sort-by-selection" value={this.state.sortBy} onChange={this.changeSortMethod.bind(this)}>
+              <select className="form-control sort-by-selection" value={this.state.sortBy} onChange={this.changeSortMethod}>
                 <option value="voteScore">Vote Score</option>
                 <option value="timestamp">TimeStamp</option>
               </select>
@@ -105,18 +109,18 @@ class Comments extends React.Component {
           </div>
           <div className="row margin-top-10">
             <div className="col-md-12">
-              {this.state.comments.map(comment => (
+              {this.state.comments ? this.state.comments.map(comment => (
                 <div className="" key={comment.id}>
                   <h6 style={{marginBottom: 4}} className="margin-top-10"><b>{comment.author}:</b>
                     <span className="text-muted">{helpers.time(comment.timestamp)}</span> &nbsp;
-                    <span><i className="fa fa-pencil-square text-info" id={comment.id} onClick={this.editComment.bind(this)}></i></span> &nbsp;
+                    <span><i className="fa fa-pencil-square text-info" id={comment.id} onClick={this.editComment}></i></span> &nbsp;
                     <span><i onClick={this.deleteComment.bind(this)} id={comment.id} className="fa fa-minus-square text-danger"></i></span> &nbsp;
                   </h6>
                   <span className="text-muted">{comment.body}</span>
                   <p style={{marginBottom:0}}>votes: {comment.voteScore}</p>
                   <Vote size={20} id={comment.id} type={"comment"} />
                 </div>
-              ))}
+              )) : []}
               <form onSubmit={this.createComment} className="margin-top-10">
                 <div className="row">
                   <div className="col-md-6">
@@ -129,14 +133,14 @@ class Comments extends React.Component {
               </form>
 
               <Modal isOpen={this.state.openModal} contentLabel="Create Modal">
-                <i className="fa fa-close pull-right" onClick={this.closeModal.bind(this)}></i>
+                <i className="fa fa-close pull-right" onClick={this.closeModal}></i>
                 <div className="row">
                   <div className="col-md-12">
                     <h4>Edit Post</h4>
                     <form onSubmit={this.saveComment}>
                       <div className="form-group">
                         <label>Body</label>
-                        <textarea className="form-control" id="body" placeholder="Content of your comment"  onChange={this.handleChange.bind(this)} value={this.state.editComment.body} required={true}/>
+                        <textarea className="form-control" id="body" placeholder="Content of your comment"  onChange={this.handleChange} value={this.state.editComment.body} required={true}/>
                       </div>
                      <button type="submit" className="btn btn-primary">Update Comment</button>
                     </form>
@@ -152,7 +156,7 @@ class Comments extends React.Component {
 }
 
 function mapStateToProps({comments}) {
-  return {comments}
+  return {comments: helpers.sort(comments)}
 }
 function mapDispatchToProps(dispatch) {
   let actions = {...postActions, ...commentActions};
