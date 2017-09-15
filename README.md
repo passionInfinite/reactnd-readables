@@ -13,6 +13,10 @@ Backend API Server is of udacity starter kit. So If you are using own server it 
 
 https://github.com/udacity/reactnd-project-readable-starter.git
 
+After cloning the starter repository from above url.
+`cd into project directory` and run `node server.js`.
+This will start your backend server which will listen on port `3001`
+For API endpoints documentation visit `http://localhost:3001`
 
 
 # Contributing
