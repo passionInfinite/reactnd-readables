@@ -7,28 +7,32 @@ import {
 import initialStates from './initialStates'
 
 export default function comments(state = initialStates.comments, action) {
-  const {comment, comments} = action
+  const {comment, comments, postId} = action
   switch (action.type) {
 
     case GET_COMMENTS:
-      return comments
+      return {
+        ...state,
+        [postId] : comments
+      }
 
     case ADD_COMMENT:
-      return [
+      return {
         ...state,
-        Object.assign({}, comment)
-      ]
+        [postId]: state[postId].concat(comment)
+      }
 
     case UPDATE_COMMENT:
-      return state.map(currentComment => {
-        if (currentComment.id === comment.id) {
-          return comment
-        }
-        return currentComment
-      })
+      let newComments = state[postId].filter(oldComment => oldComment.id !== comment.id)
+      newComments.push(comment)
+      return {
+        [postId] : newComments
+      };
 
     case DELETE_COMMENT:
-      return state.filter(currentComment => currentComment.id !== comment)
+      return {
+        [postId] : state[postId].filter(currentComment => currentComment.id !== comment)
+      }
 
     default:
       return state

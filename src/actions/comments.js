@@ -13,7 +13,7 @@ export function loadCommentsById(postId) {
   return function (dispatch) {
     return api.getCommentsById(postId).then(response => {
       if (response) {
-        dispatch(getComments(response.data))
+        dispatch(getComments(postId, response.data))
       }
     })
   }
@@ -63,7 +63,7 @@ export function removeComment(commentId) {
   return function (dispatch) {
     return api.deleteComment(commentId).then(response => {
       if (response) {
-        dispatch(deleteComment(commentId))
+        dispatch(deleteComment(response.data))
       }
     })
   }
@@ -71,30 +71,34 @@ export function removeComment(commentId) {
 
 
 /* Actions */
-export function getComments(comments) {
+export function getComments(postId, comments) {
   return {
     type: GET_COMMENTS,
-    comments: comments
+    comments :  comments,
+    postId: postId
   }
 }
 
 export function addComment(comment) {
   return {
     type: ADD_COMMENT,
-    comment: comment
+    comment: comment,
+    postId: comment.parentId
   }
 }
 
 export function updateComment(comment) {
   return {
     type: UPDATE_COMMENT,
-    comment: comment
+    comment: comment,
+    postId: comment.parentId
   }
 }
 
-export function deleteComment(commentId) {
+export function deleteComment(comment) {
   return {
     type: DELETE_COMMENT,
-    comment: commentId
+    comment: comment.id,
+    postId: comment.parentId
   }
 }

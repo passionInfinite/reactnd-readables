@@ -3,7 +3,7 @@ import {Route, Switch} from 'react-router';
 import PostsPage from './components/Posts/PostsPage';
 import PostPage from "./components/Posts/PostPage";
 import CategoryPage from "./components/Category/CategoryPage";
-import {NotFound} from "./components/NotFound";
+import NotFound from "./components/NotFound";
 
 export default (
   <div>

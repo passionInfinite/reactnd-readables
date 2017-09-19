@@ -29,6 +29,10 @@ class Post extends React.Component {
     categories: [],
     openModal: false
   }
+  componentWillMount(){
+    this.props.actions.loadCommentsById(this.props.post.id)
+  }
+
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.post) {
@@ -45,12 +49,12 @@ class Post extends React.Component {
         showBody: false,
         showComment: false,
         categories: nextProps.categories,
-        comments: []
+        comments: nextProps.comments
       })
     }
   }
 
-  deletePost = e => {
+  deletePost = (e) => {
     e.preventDefault()
     let postId = e.target.id
     this.props.actions.removePost(postId)
@@ -104,7 +108,7 @@ class Post extends React.Component {
                     </div>
                     <div className="col-md-2 ml-md-auto">
                       <button className="btn btn-info btn-sm margin-15" id={this.props.post.id} onClick={this.editPost}><i className="fa fa-pencil"></i></button>
-                      <button className="btn btn-danger btn-sm" id={this.props.post.id} onClick={this.deletePost}><i className="fa fa-trash"></i></button>
+                      <button className="btn btn-danger btn-sm margin-15" id={this.props.post.id} onClick={this.deletePost}>Delete</button>
                     </div>
                   </div>
                 </h4>
@@ -116,14 +120,16 @@ class Post extends React.Component {
                     <Vote size={24} id={this.props.post.id} type={"post"} />
                   </div>
                 </div>
-              </div>
-              {this.props.comments && this.props.showComments ? <div className="card-footer">
                 <div className="row margin-top-10">
                   <div className="col-md-12">
-                    <h6>Comments: <span className="badge badge-success">{this.props.comments.length}</span></h6>
+                    {this.props.comments[this.props.post.id] !== undefined ?
+                      <h6>Comments: <span className="badge badge-success">{this.props.comments[this.props.post.id].length}</span></h6>
+                      : 0}
                   </div>
                 </div>
-                <Comments comments={this.props.comments} post={this.props.post} />
+              </div>
+              {this.props.comments && this.props.showComments ? <div className="card-footer">
+                <Comments comments={this.props.comments[this.props.post.id]} post={this.props.post} />
               </div>: ""}
             </div>
 

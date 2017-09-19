@@ -37,7 +37,7 @@ class Comments extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      comments: helpers.sort(nextProps.comments, this.state.sortBy),
+      comments: helpers.sort(nextProps.comments[0], this.state.sortBy),
       sortBy: this.state.sortBy
     })
   }
@@ -45,7 +45,7 @@ class Comments extends React.Component {
   changeSortMethod (e) {
     let sortBy = e.target.value
     this.setState({
-      comments: helpers.sort(this.props.comments, sortBy),
+      comments: helpers.sort(this.props.comments[0], sortBy),
       sortBy
     });
   }
@@ -67,7 +67,7 @@ class Comments extends React.Component {
   editComment = e => {
     e.preventDefault()
     let commentId = e.target.id
-    let comments = this.props.comments
+    let comments = this.props.comments[0]
     let comment = comments.filter( currentComment => currentComment.id === commentId)
     this.setState({
       openModal:true,

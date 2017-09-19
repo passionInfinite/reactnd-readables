@@ -12,12 +12,12 @@ export const DOWN_VOTE = 'DOWN_VOTE'
 
 export function loadPosts() {
   return function (dispatch) {
-    return api.getAllPosts().then(response  => {
+    api.getAllPosts().then(response  => {
       if (response) {
         dispatch(getPosts(response.data))
       }
     })
-  }  
+  }
 }
 
 export function loadPostById(postId) {
@@ -96,14 +96,14 @@ export function createPost(post) {
 export function getPosts(posts) {
   return {
     type: GET_POSTS,
-    posts: posts.filter(post => post.delete !== false)
+    posts: posts.filter(post => post.deleted !== true)
   }
 }
 
 export function postById(post) {
   return {
     type: GET_POST_BY_ID,
-    post: helper.isEmpty(post) ? null :[post]
+    post: helper.isEmpty(post) ? [null] :[post]
   }
 }
 

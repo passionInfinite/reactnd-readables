@@ -1,12 +1,16 @@
 import React from 'react'
 import Post from "./Post";
 
-export default function PostList({posts}) {
-  return (
+class PostList extends React.Component
+{
+  render() {
+    return (
       <div>
-        {posts ? posts.map(post => (
+        {this.props.posts ? this.props.posts.map(post => (
           <Post post={post} key={post.id}/>
         )) : []}
       </div>
-  )
+    )
+  }
 }
+export default PostList
